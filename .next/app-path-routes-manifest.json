@@ -1,0 +1,16 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/api/auth/google/route": "/api/auth/google",
+  "/api/auth/login/route": "/api/auth/login",
+  "/api/auth/session/route": "/api/auth/session",
+  "/api/auth/logout/route": "/api/auth/logout",
+  "/api/auth/google/callback/route": "/api/auth/google/callback",
+  "/api/auth/register/route": "/api/auth/register",
+  "/api/saved-codes/[id]/route": "/api/saved-codes/[id]",
+  "/api/run/route": "/api/run",
+  "/api/saved-codes/route": "/api/saved-codes",
+  "/page": "/",
+  "/dashboard/page": "/dashboard",
+  "/editor/[id]/page": "/editor/[id]",
+  "/editor/new/page": "/editor/new"
+}
