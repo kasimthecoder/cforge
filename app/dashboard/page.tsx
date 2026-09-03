@@ -13,7 +13,7 @@ export default async function DashboardPage() {
   const projects = await prisma.savedCode.findMany({
     where: { userId: user.id },
     orderBy: { updatedAt: 'desc' },
-    select: { id: true, title: true, code: true, createdAt: true, updatedAt: true },
+    select: { id: true, title: true, code: true, language: true, createdAt: true, updatedAt: true },
   });
 
   return <ProjectDashboard projects={projects.map((project) => ({ ...project, createdAt: project.createdAt.toISOString(), updatedAt: project.updatedAt.toISOString() }))} />;

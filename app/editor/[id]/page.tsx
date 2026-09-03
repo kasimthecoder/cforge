@@ -10,7 +10,7 @@ export default async function ExistingEditorPage({ params }: { params: Promise<{
   const user = await getAuthenticatedUserFromCookieHeader((await cookies()).toString());
   if (!user) redirect('/?auth=required');
   const { id } = await params;
-  const project = await prisma.savedCode.findFirst({ where: { id, userId: user.id }, select: { id: true, title: true, code: true } });
+  const project = await prisma.savedCode.findFirst({ where: { id, userId: user.id }, select: { id: true, title: true, code: true, language: true } });
   if (!project) notFound();
-  return <CForgeEditor project={project} isAuthenticated />;
+  return <CForgeEditor project={{ ...project, language: project.language === 'javascript' ? 'javascript' : 'c' }} isAuthenticated />;
 }

@@ -1,6 +1,6 @@
 # CForge
 
-A student-focused online C IDE powered by [Judge0 CE](https://ce.judge0.com), Next.js, CodeMirror 6, Prisma, and PostgreSQL.
+A student-focused online C and Node.js IDE powered by [Judge0 CE](https://ce.judge0.com), Next.js, CodeMirror 6, Prisma, and PostgreSQL.
 
 To install dependencies:
 
@@ -14,7 +14,7 @@ To run the IDE in development mode:
 bun run dev
 ```
 
-Then open `http://localhost:3000`. The landing page links to a guest editor and account sign-in. Use `Ctrl+Enter` (or the Run button) to execute the current program. The server proxies submissions to Judge0 so the browser does not need to call the API directly.
+Then open `http://localhost:3000`. The landing page links to a guest editor and account sign-in. Choose C or Node.js, then use `Ctrl+Enter` (or the Run button) to execute the current program. The server proxies submissions to Judge0 so the browser does not need to call the API directly.
 
 ## Environment setup
 
@@ -37,7 +37,7 @@ Routes:
 
 - `/` is the marketing landing page and authentication entry point.
 - `/dashboard` is the authenticated project library (create, open, and delete).
-- `/editor/new` is a guest-capable editor for trying C and running stdin.
+- `/editor/new` is a guest-capable editor for trying C or Node.js and running stdin.
 - `/editor/[id]` edits an owned saved project and autosaves changes.
 
 Google login is available once Google OAuth credentials are configured. Project CRUD is always ownership-checked on the server; running code does not require an account.

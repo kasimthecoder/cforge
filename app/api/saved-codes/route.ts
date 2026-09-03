@@ -35,9 +35,10 @@ export async function POST(request: Request) {
   }
 
   try {
-    const body = (await request.json()) as { title?: unknown; code?: unknown };
+    const body = (await request.json()) as { title?: unknown; code?: unknown; language?: unknown };
     const title = typeof body.title === 'string' ? body.title.trim() : '';
     const code = typeof body.code === 'string' ? body.code : '';
+    const language = body.language === 'javascript' ? 'javascript' : 'c';
 
     if (!title) {
       return NextResponse.json({ error: 'Please provide a title for this program.' }, { status: 400 });
@@ -56,6 +57,7 @@ export async function POST(request: Request) {
         userId: user.id,
         title,
         code,
+        language,
       },
     });
 

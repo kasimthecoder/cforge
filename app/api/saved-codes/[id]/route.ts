@@ -18,6 +18,7 @@ async function getOwnedSavedCode(request: Request, savedCodeId: string) {
       id: true,
       title: true,
       code: true,
+      language: true,
       userId: true,
       createdAt: true,
       updatedAt: true,
@@ -76,9 +77,10 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   }
 
   try {
-    const body = (await request.json()) as { title?: unknown; code?: unknown };
+    const body = (await request.json()) as { title?: unknown; code?: unknown; language?: unknown };
     const title = typeof body.title === 'string' ? body.title.trim() : savedCode.title;
     const code = typeof body.code === 'string' ? body.code : savedCode.code;
+    const language = body.language === 'javascript' ? 'javascript' : body.language === 'c' ? 'c' : savedCode.language;
 
     if (!title) {
       return NextResponse.json({ error: 'Please provide a title for this program.' }, { status: 400 });
@@ -92,7 +94,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
     const updatedCode = await prisma.savedCode.update({
       where: { id: savedCode.id },
-      data: { title, code },
+      data: { title, code, language },
     });
 
     return NextResponse.json({ savedCode: updatedCode });

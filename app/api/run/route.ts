@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 
 const JUDGE0_BASE_URL = process.env.JUDGE0_BASE_URL ?? 'https://ce.judge0.com';
-const LANGUAGE_ID = 50;
+const LANGUAGE_IDS = { c: 50, javascript: 63 } as const;
+type Language = keyof typeof LANGUAGE_IDS;
 
 export const runtime = 'nodejs';
 
@@ -54,14 +55,14 @@ async function readJudge0Error(response: Response, fallback: string) {
   }
 }
 
-async function runCCode(sourceCode: string, stdin: string): Promise<Judge0Result> {
+async function runCode(sourceCode: string, stdin: string, language: Language): Promise<Judge0Result> {
   const submissionResponse = await fetch(
     `${JUDGE0_BASE_URL}/submissions?base64_encoded=true`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        language_id: LANGUAGE_ID,
+        language_id: LANGUAGE_IDS[language],
         source_code: encodeBase64(sourceCode),
         stdin: encodeBase64(stdin),
         cpu_time_limit: 2,
@@ -100,18 +101,22 @@ async function runCCode(sourceCode: string, stdin: string): Promise<Judge0Result
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as { sourceCode?: unknown; stdin?: unknown };
+    const body = (await request.json()) as { sourceCode?: unknown; stdin?: unknown; language?: unknown };
     const sourceCode = typeof body.sourceCode === 'string' ? body.sourceCode : '';
     const stdin = typeof body.stdin === 'string' ? body.stdin : '';
+    const language = body.language === 'javascript' ? 'javascript' : body.language === 'c' ? 'c' : null;
 
     if (!sourceCode.trim()) {
       return NextResponse.json(
-        { error: 'Add some C code before running.' },
+        { error: 'Add some code before running.' },
         { status: 400 },
       );
     }
+    if (!language) {
+      return NextResponse.json({ error: 'Choose a supported language before running.' }, { status: 400 });
+    }
 
-    const result = await runCCode(sourceCode, stdin);
+    const result = await runCode(sourceCode, stdin, language);
     return NextResponse.json(result);
   } catch (error) {
     if (error instanceof SyntaxError) {
